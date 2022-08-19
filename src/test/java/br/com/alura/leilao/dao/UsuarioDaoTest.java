@@ -3,6 +3,7 @@ package br.com.alura.leilao.dao;
 import static org.junit.jupiter.api.Assertions.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,7 +21,7 @@ class UsuarioDaoTest {
 
 
 	@Test
-	void deveBuscarUsuarioPorUserName() {
+	void deveBuscarUsuarioCadastradoPorUserName() {
 		em = JPAUtuil.getEntityManager();
 		this.dao = new UsuarioDao(em);
 		Usuario usuario = new Usuario("fulano", "fulano@email.com", "12345678");
@@ -30,6 +31,18 @@ class UsuarioDaoTest {
 
 		Usuario usuarioResult = this.dao.buscarPorUsername("fulano");
 		Assert.assertNotNull(usuarioResult);
+	}
+	
+	@Test
+	void naoDeveBuscarUsuarioCadastradoPorUserName() {
+		em = JPAUtuil.getEntityManager();
+		this.dao = new UsuarioDao(em);
+		Usuario usuario = new Usuario("fulano", "fulano@email.com", "12345678");
+		em.getTransaction().begin();
+		em.persist(usuario);
+		em.getTransaction().commit();
+
+		Assert.assertThrows(NoResultException.class, () -> this.dao.buscarPorUsername("beltrano"));
 	}
 
 }
