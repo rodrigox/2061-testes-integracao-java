@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import br.com.alura.leilao.model.Leilao;
 import br.com.alura.leilao.model.Usuario;
 import br.com.alura.leilao.util.JPAUtuil;
+import br.com.alura.leilao.util.builder.LeilaoBuilder;
+import br.com.alura.leilao.util.builder.UsuarioBuilder;
 
 class LeilaoDaoTest {
 
@@ -35,8 +37,20 @@ class LeilaoDaoTest {
 	
 	@Test
 	void deveCadastrarLeilao() {
-		Usuario usuario = criarUsuario();
-		Leilao leilao = new Leilao("Mochila",new BigDecimal("70"), LocalDate.now(),usuario); 
+		Usuario usuario = new UsuarioBuilder()
+				.nome("fulano")
+				.email("fulano@gmail.com")
+				.senha("12345678")
+				.build();
+		em.persist(usuario);
+
+		
+		Leilao leilao = new LeilaoBuilder()
+				.nome("Mochila")
+				.valorInicial("70")
+				.usuario(usuario
+				).data(LocalDate.now()).build();
+		
 		leilao = dao.salvar(leilao);
 		Leilao salvo   = dao.buscarPorId(leilao.getId());
 		Assert.assertNotNull(salvo);
@@ -46,11 +60,23 @@ class LeilaoDaoTest {
 	
 	@Test
 	void deveAtualizarLeilao() {
-		Usuario usuario = criarUsuario();
-		Leilao leilao = new Leilao("Mochila",new BigDecimal("70"), LocalDate.now(),usuario); 
-		leilao.setNome("CARRO");
-		leilao.setValorInicial(new BigDecimal("1000"));
+
+		Usuario usuario = new UsuarioBuilder()
+		.nome("fulano")
+		.email("fulano@gmail.com")
+		.senha("12345678")
+		.build();
+		em.persist(usuario);
+
+		
+		Leilao leilao = new LeilaoBuilder()
+				.nome("CARRO")
+				.valorInicial("1000")
+				.usuario(usuario
+				).data(LocalDate.now()).build();
+
 		leilao = dao.salvar(leilao);
+		
 		Leilao salvo   = dao.buscarPorId(leilao.getId());
 		Assert.assertEquals("CARRO",salvo.getNome());
 		Assert.assertEquals(new BigDecimal("1000"),salvo.getValorInicial());
@@ -59,9 +85,5 @@ class LeilaoDaoTest {
 	}
 	
 
-	private Usuario criarUsuario() {
-		Usuario usuario = new Usuario("fulano", "fulano@email.com", "12345678");
-		em.persist(usuario);
-		return usuario;
-	}
+	
 }

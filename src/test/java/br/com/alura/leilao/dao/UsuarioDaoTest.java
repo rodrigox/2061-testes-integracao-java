@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import br.com.alura.leilao.model.Usuario;
 import br.com.alura.leilao.util.JPAUtuil;
+import br.com.alura.leilao.util.builder.UsuarioBuilder;
 
 class UsuarioDaoTest {
 
@@ -30,6 +31,7 @@ class UsuarioDaoTest {
 	}
 	@Test
 	void deveBuscarUsuarioCadastradoPorUserName() {
+		
 		Usuario usuario = criarUsuario();
 		Usuario usuarioResult = this.dao.buscarPorUsername(usuario.getNome());
 		Assert.assertNotNull(usuarioResult);
@@ -49,8 +51,9 @@ class UsuarioDaoTest {
 
 	}
 
+	
 	private Usuario criarUsuario() {
-		Usuario usuario = new Usuario("fulano", "fulano@email.com", "12345678");
+		Usuario usuario = new UsuarioBuilder().nome("fulano").email("fulano@gmail.com").senha("12345678").build();
 		em.persist(usuario);
 		return usuario;
 	}
