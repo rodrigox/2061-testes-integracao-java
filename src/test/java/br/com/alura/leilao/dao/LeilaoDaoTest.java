@@ -37,12 +37,7 @@ class LeilaoDaoTest {
 	
 	@Test
 	void deveCadastrarLeilao() {
-		Usuario usuario = new UsuarioBuilder()
-				.nome("fulano")
-				.email("fulano@gmail.com")
-				.senha("12345678")
-				.build();
-		em.persist(usuario);
+		Usuario usuario = criarUsuario();
 
 		
 		Leilao leilao = new LeilaoBuilder()
@@ -57,16 +52,10 @@ class LeilaoDaoTest {
 
 	}
 	
-	
 	@Test
 	void deveAtualizarLeilao() {
 
-		Usuario usuario = new UsuarioBuilder()
-		.nome("fulano")
-		.email("fulano@gmail.com")
-		.senha("12345678")
-		.build();
-		em.persist(usuario);
+		Usuario usuario = criarUsuario();
 
 		
 		Leilao leilao = new LeilaoBuilder()
@@ -85,5 +74,15 @@ class LeilaoDaoTest {
 	}
 	
 
+	private Usuario criarUsuario() {
+		Usuario usuario = new UsuarioBuilder()
+				.nome("fulano")
+				.email("fulano@gmail.com")
+				.senha("12345678")
+				.build();
+		em.persist(usuario);
+		return usuario;
+	}
+	
 	
 }
