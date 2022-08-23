@@ -1,7 +1,6 @@
 package br.com.alura.leilao.dao;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +24,6 @@ public class LanceDao {
 
 	public Lance buscarMaiorLanceDoLeilao(Leilao leilao) {
 		return em.createQuery("SELECT l FROM Lance l WHERE l.valor = (SELECT MAX(lance.valor) FROM Lance lance)", Lance.class)
-				//.setParameter("leilao", leilao)
 				.getSingleResult();
 	}
 	
